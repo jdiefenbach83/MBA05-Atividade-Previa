@@ -17,15 +17,21 @@ export default new Vuex.Store({
         password: '123456'
       },
     ],
-    signedIn: {},
+    authenticatedUser: {},
   },
   mutations: {
     addUser(state, data) {
       state.users.push(data);
+    },
+    signedIn(state, data) {
+      state.authenticatedUser = data;
     }
   },
   actions: {
   },
   modules: {
+  },
+  getters:{
+    isAuthenticated: state => Object.keys(state.authenticatedUser).length > 0,
   }
 })
