@@ -1,60 +1,70 @@
 <template>
-  <v-card>
-    <v-card-title>Sign Up Form</v-card-title>
-    <v-card-text>
-      <v-form v-model="isValid" @submit.prevent >
-        <v-text-field 
-          label="Name" 
-          v-model="name"          
-          :rules="rules.nameRules"          
-          required
+  <div>
+    <transition>
+      <v-alert type="success" v-if="message.show">{{message.description}}</v-alert>
+    </transition>
+    <v-card>
+      <v-card-title>Sign Up Form</v-card-title>
+      <v-card-text>
+        <v-form 
+          v-model="isValid" 
+          @submit.prevent
+          ref="form"
+          :disabled="disabled"
         >
-        </v-text-field>
-        <v-text-field 
-          label="Email" 
-          v-model="email"          
-          :rules="rules.emailRules"
-          error-count="2"
-          required
-        >
-        </v-text-field>
-        <v-text-field 
-          label="Email confirmation" 
-          v-model="emailConfirmation"          
-          :rules="rules.emailConfirmationRules"
-          error-count="2"
-          required
-          autocomplete="off"
-        >
-        </v-text-field>
-        <v-text-field 
-          label="Password" 
-          v-model="password"
-          type="password"
-          :rules="rules.passwordRules"
-          error-count="5"
-          required
-        ></v-text-field>
-        <v-text-field 
-          label="Password Confirmation" 
-          v-model="passwordConfirmation"          
-          type="password"
-          :rules="rules.passwordConfirmationRules"
-          error-count="2"
-          required
-        >
-        </v-text-field>
-      </v-form>
-    </v-card-text>    
-    <v-card-actions>
-      <v-btn 
-        color="primary"
-        :disabled="!isValid"     
-        @click="addUser"     
-      >Sign Up
-      </v-btn>    
-    </v-card-actions>
-  </v-card> 
+          <v-text-field 
+            label="Name" 
+            v-model="name"          
+            :rules="rules.nameRules"          
+            required
+          >
+          </v-text-field>
+          <v-text-field 
+            label="Email" 
+            v-model="email"          
+            :rules="rules.emailRules"
+            error-count="2"
+            required
+          >
+          </v-text-field>
+          <v-text-field 
+            label="Email confirmation" 
+            v-model="emailConfirmation"          
+            :rules="rules.emailConfirmationRules"
+            error-count="2"
+            required
+            autocomplete="off"
+          >
+          </v-text-field>
+          <v-text-field 
+            label="Password" 
+            v-model="password"
+            type="password"
+            :rules="rules.passwordRules"
+            error-count="5"
+            required
+          ></v-text-field>
+          <v-text-field 
+            label="Password Confirmation" 
+            v-model="passwordConfirmation"          
+            type="password"
+            :rules="rules.passwordConfirmationRules"
+            error-count="2"
+            required
+          >
+          </v-text-field>
+        </v-form>
+      </v-card-text>    
+      <v-card-actions>
+        <v-btn 
+          color="primary"
+          :disabled="!isValid"     
+          @click="addUser"     
+        >Sign Up
+        </v-btn>    
+      </v-card-actions>
+    </v-card> 
+  </div>  
 </template>
 
 <script>
@@ -67,7 +77,12 @@ export default {
     emailConfirmation: null,
     password: null,
     passwordConfirmation: null,
-    isValid: true,    
+    isValid: true,
+    disabled: false,
+    message: {
+      show: false,
+      description: '',
+    }
   }),
   computed: {
     rules () {
@@ -100,6 +115,19 @@ export default {
     }
   },
   methods: {
+    showMessage(){
+      this.message.show = true;
+      this.message.description = 'User created with success. You will redirected to Sign In page';
+      this.$refs.form.reset();
+      this.disabled = true;
+      const self = this;
+      
+      setTimeout(() => {
+        self.message.show = false,
+        self.message.description = ''
+        this.$router.push({ name: 'SignIn'})
+      }, 3000);
+    },
     findUser(email) {    
       const exists = this.$store.state.users.find(user => user.email === email);
       
@@ -113,7 +141,7 @@ export default {
       }
       
       this.$store.commit('addUser', newUser);
-      this.$router.push({ name: 'SignIn'})      
+      this.showMessage();
     }
   }
 }
