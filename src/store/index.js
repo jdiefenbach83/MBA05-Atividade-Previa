@@ -16,7 +16,8 @@ export default new Vuex.Store({
         email: 'jane.doe@gmail.com',
         password: '123456'
       },
-    ]
+    ],
+    signedIn: {},
   },
   mutations: {
     addUser(state, data) {
