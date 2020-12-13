@@ -19,7 +19,7 @@ export default new Vuex.Store({
     ]
   },
   mutations: {
-    add(state, data) {
+    addUser(state, data) {
       state.users.push(data);
     }
   },
