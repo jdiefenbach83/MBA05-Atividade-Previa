@@ -21,7 +21,9 @@ export default new Vuex.Store({
   },
   mutations: {
     addUser(state, data) {
-      state.users.push(data);
+      console.log('state', state);
+      console.log('data', data);
+      state.users = [ ...state.users, data ]
     },
     signedIn(state, data) {
       state.authenticatedUser = data;
