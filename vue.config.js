@@ -1,5 +1,8 @@
 module.exports = {
-  publicPath: "/MBA05-Atividade-Previa/",
+  publicPath: 
+    process.env.NODE_ENV === 'production'
+    ? '/MBA05-Atividade-Previa/'
+    : '/',
   "transpileDependencies": [
     "vuetify"
   ]
